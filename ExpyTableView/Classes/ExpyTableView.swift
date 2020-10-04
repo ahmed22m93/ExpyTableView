@@ -31,7 +31,8 @@ import UIKit
 	
 	fileprivate weak var expyDataSource: ExpyTableViewDataSource?
 	fileprivate weak var expyDelegate: ExpyTableViewDelegate?
-	
+	public var scrollDidScroll: ((_ scrollView: UIScrollView) -> Void)?
+    public var scrollViewDidEndDragging : ((_ scrollView: UIScrollView) -> Void)?
 	public fileprivate(set) var expandedSections: [Int: Bool] = [:]
 	
       open var expandingAnimation: UITableView.RowAnimation = ExpyTableViewDefaultValues.expandingAnimation
@@ -184,6 +185,16 @@ extension ExpyTableView: UITableViewDelegate {
 		guard canExpand(indexPath.section), indexPath.row == 0 else { return }
 		didExpand(indexPath.section) ? collapse(indexPath.section) : expand(indexPath.section)
 	}
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if let scrollDidScroll = scrollDidScroll {
+            scrollDidScroll(scrollView)
+        }
+    }
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if let scrollViewDidEndDragging = scrollViewDidEndDragging {
+            scrollViewDidEndDragging(scrollView)
+        }
+    }
 }
 
 //MARK: Helper Methods
